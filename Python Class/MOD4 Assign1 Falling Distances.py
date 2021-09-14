@@ -41,7 +41,7 @@ def timeValidator(userInput):
     return userInput > 0
 
 # Get the duration input
-def getTime(prompt="Please the time to fall in seconds:"):
+def getTime(prompt="Please the enter the time to fall in seconds:"):
     while True:
         userInput = input(prompt)
         if timeValidator(userInput):

@@ -4,7 +4,7 @@
 # Weight on Other Planets
 # For this I think I will play with the dictionary functionality and see how that works since we spoke about it in class
 
-# Define and create the diction of the multipliers
+# Define and create the dictionary of the multipliers
 body_multipliers = {
     "Sun": 27.01,
     "Mercury": 0.38,

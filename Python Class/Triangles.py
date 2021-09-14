@@ -26,21 +26,21 @@
 import math
 toBeChecked = 0
 
-#Validator Function, takes user input and checks to see if its a positive number and returns the input as an int.
+#Validator Function, takes user input and checks to see if its a positive number and returns the input.
 
 def Validator(toBeChecked):
     isValid = False
 
-    while isValid == False:
+    while not isValid:
         try:
-            if (int(toBeChecked) !=0 and toBeChecked.isnumeric() == True):     #var.isnumeric() will rtrn false if its a string or negative
+            if float(toBeChecked) >0.0:
                 isValid = True
                 break
             else:
                 toBeChecked = input("Please enter a positive number and try again:")
         except ValueError:
             toBeChecked = input("Please enter a positive number and try again:")
-    return (int(toBeChecked))
+    return toBeChecked
 
 # Is it a triangle function
 def triCheck(sideA, sideB, sideC):
@@ -49,8 +49,7 @@ def triCheck(sideA, sideB, sideC):
     else:
         triType(sideA, sideB, sideC)
 
-
-#Triangle type function, the sort is to always get the pythagorean theorem to work right.
+# Triangle type function, the sort is to always get the pythagorean theorem to work right.
 
 def triType(sideA, sideB, sideC):
     sides = [sideA, sideB, sideC]
@@ -67,9 +66,9 @@ def triType(sideA, sideB, sideC):
 def main():
     name = input("Hey there, whats your name?")
     print("Thanks",name,"now lets see what kind of Triangle you have!")
-    sideA = Validator(input("First I'm going to need the length of the first side:"))
-    sideB = Validator(input("Now, lets get the length of that second side:"))
-    sideC = Validator(input("Ok, One more side left, give it to me please:"))
+    sideA = float(Validator(input("First I'm going to need the length of the first side:")))
+    sideB = float(Validator(input("Now, lets get the length of that second side:")))
+    sideC = float(Validator(input("Ok, One more side left, give it to me please:")))
     triCheck(sideA, sideB, sideC)
 
 main()

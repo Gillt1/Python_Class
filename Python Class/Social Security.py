@@ -117,7 +117,7 @@ def incomeCalc(income):
 def displayInfo(retDate, pay):
     print("*****************************")
     print("You can start Social Security on:")
-    print(retDate,"(YYY-MM-DD) and receive $",pay,".")
+    print(retDate,"(YYYY-MM-DD) and receive $",round(pay,2),".")
     print("**************************")
 
 def main():
