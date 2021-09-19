@@ -31,51 +31,63 @@ from random import shuffle
 class Card:
     suits = ("Diamonds", "Hearts", "Spades", "Clubs", "Pentacles", "Crosses")
     ids = ("Reaper", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Saviour")
-    values = (0,1,2,3,4,5,6,7,8,9,10,10,10,10,15)
+    values = ("15","1","2","3","4","5","6","7","8","9","10","10","10","10","15")
 
-    def __init__(c, ids, suits, values):                      # learning to use self: c for this method = self
-        c.suit = suits
-        c.value = values
-        c.ident = ids
+    def __init__(self, suits, ids, values):
+        self.suit = suits
+        self.value = values
+        self.ident = ids
 
-    def cardName (c):
-        aCard = c.ids[c.ident] + "of" + c.suits[c.suit] + "worth" + c.values[c.value]
+    def __repr__(self):                                        #__repr__ is a defined method
+        aCard = self.ids[self.ident] + " of " + self.suits[self.suit] + " worth " + self.values[self.value]
         return aCard
 
-class Deck:                                                   # learning to use self: d for this method = self
-    def __init__(d):
-        d.cards = []                                          # Creates empty deck
-        for ids in range(15):                                 # Begin deck population
-            for vals in range(15):
-                for suit in range(6):
-                    d.cards.append(Card(ids, vals, suit))     # End deck population with the face number, suite and value
-        shuffle(d.cards)                                      # Shuffles deck
+class Deck:
+    def __init__(self):
+        self.deck = []                                         # Creates empty deck (was self.cards)
+        for s in range(0,6):                                    # Begin deck population
+            for id in range(0,15):
+                v = Card.values[id]                             # typeError incorrect way to index?
+                print(id,v)
+                self.deck.append(Card(s,id,v))                 # End deck population w/the face number, suite & value
+                print(self.deck)
+        shuffle(self.deck)                                     # Shuffles deck
 
-    def deal_card(d):
-        if len(d.cards) == 0:                                 # Checks to see if deck is empty
+    def deal_card(self):
+        if len(self.deck) == 0:                                # Checks to see if deck is empty
             print("Deck empty")
             return
         else:
-            return d.cards.pop()                              # picks a card and removes it from the deck
+            return self.deck.pop()                             # picks a card and removes it from the deck
 
 class Player:
     def __init__(self, name):
         self.name = name
+        self.card = None
         self.handValue = 0
 
 class Deal:
     def __init__(self):
         name1 = input("Player Name:")
-        self.deck = Deck()                                   # Calls the Deck object
+        self.deck = Deck()                                    # Calls the Deck object
+        self.player = Player(name1)                           # Idetifies the name to the player
+
+    def draw(self, p1n, p1c):
+        d = "{} drew {}"
+        d = d.format(p1n, p1c)
+        print(d)
 
     def dealHand (self):
+        #cards = self.deck.deck            #usure why this is here, the final "deck" used to be "cards" Deck().deck was
+                                           #      called "cards", but "deck" is clearer
         cardsToDeal = 7                                      # Dictates how many cards a player will get in the hand
         hand = []                                            # Creates empty hand for the player
-        cards = self.deck.cards
-        while len(cards) >= 7:
-            for i in range (cardsToDeal):
-                hand += self.deck.deal_card()
-                print(hand)
+        while len(hand) < cardsToDeal:                       # Adds the defined number of cards to the hand
+            p1c = self.deck.deal_card()                      # gets card from deck
+            p1n = self.player.name
+            self.draw(p1n,p1c)                               # notifies what card was delt/drawn w/draw method
+            hand.append(p1c)                                 # adds card to hand
+            print("Current Hand",hand)                       # printing hand, shows mem location for each card
 
 deal = Deal()
 deal.dealHand()
