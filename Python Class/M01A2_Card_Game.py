@@ -27,69 +27,96 @@
 # When the game is finished, the cards should be returned to the deck and prompt the user if they wish to play again.
 
 from random import shuffle
+import sys
 
 class Card:
     suits = ("Diamonds", "Hearts", "Spades", "Clubs", "Pentacles", "Crosses")
-    ids = ("Reaper", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Saviour")
-    values = ("15","1","2","3","4","5","6","7","8","9","10","10","10","10","15")
+    values = ("Reaper", "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Saviour")
 
-    def __init__(self, suits, ids, values):
+    def __init__(self, suits, values):
         self.suit = suits
         self.value = values
-        self.ident = ids
 
-    def __repr__(self):                                        #__repr__ is a defined method
-        aCard = self.ids[self.ident] + " of " + self.suits[self.suit] + " worth " + self.values[self.value]
-        return aCard
+    def __repr__(self):      #__repr__ is a defined method to change how the card is displayed when we call print on it
+        return " of ".join((self.value, self.suit))        # This wont work on a tuple so we had to remake the deck
+                                                           #    as seen below.
 
 class Deck:
     def __init__(self):
-        self.deck = []                                         # Creates empty deck (was self.cards)
-        for s in range(0,6):                                    # Begin deck population
-            for id in range(0,15):
-                v = Card.values[id]                             # typeError incorrect way to index?
-                print(id,v)
-                self.deck.append(Card(s,id,v))                 # End deck population w/the face number, suite & value
-                print(self.deck)
-        shuffle(self.deck)                                     # Shuffles deck
+        self.deck = [Card(s,v) for s in ["Diamonds", "Hearts", "Spades", "Clubs", "Pentacles",
+                                         "Crosses"] for v in ["Reaper", "Ace", "2", "3", "4",
+                                                              "5", "6", "7", "8", "9", "10", "Jack",
+                                                              "Queen", "King", "Saviour"]]     # Creates deck
 
-    def deal_card(self):
+    def shuffle(self):
+        if len(self.deck) > 1:
+            shuffle(self.deck)                                 # Shuffles deck
+
+    def deal(self):
         if len(self.deck) == 0:                                # Checks to see if deck is empty
             print("Deck empty")
             return
         else:
-            return self.deck.pop()                             # picks a card and removes it from the deck
+            return self.deck.pop(0)                             # picks a card and removes it from the deck
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.card = None
-        self.handValue = 0
-
-class Deal:
+class Hand:
     def __init__(self):
-        name1 = input("Player Name:")
-        self.deck = Deck()                                    # Calls the Deck object
-        self.player = Player(name1)                           # Idetifies the name to the player
+        self.cards = []
+        self.value = 0
 
-    def draw(self, p1n, p1c):
-        d = "{} drew {}"
-        d = d.format(p1n, p1c)
-        print(d)
+    def add_card(self, card):                                   # Adds card to hand
+        self.cards.append(card)
 
-    def dealHand (self):
-        #cards = self.deck.deck            #usure why this is here, the final "deck" used to be "cards" Deck().deck was
-                                           #      called "cards", but "deck" is clearer
-        cardsToDeal = 7                                      # Dictates how many cards a player will get in the hand
-        hand = []                                            # Creates empty hand for the player
-        while len(hand) < cardsToDeal:                       # Adds the defined number of cards to the hand
-            p1c = self.deck.deal_card()                      # gets card from deck
-            p1n = self.player.name
-            self.draw(p1n,p1c)                               # notifies what card was delt/drawn w/draw method
-            hand.append(p1c)                                 # adds card to hand
-            print("Current Hand",hand)                       # printing hand, shows mem location for each card
+    def calculate_value(self):                                  # Calculate value of the hand based on our "rules"
+        self.value = 0
+        for card in self.cards:
+            if card.value.isnumeric():
+                self.value += int(card.value)
+            else:
+                if card.value == "Saviour":
+                    self.value += 15
+                elif card.value == "Reaper":
+                    self.value += 0
+                else:
+                    self.value += 10                            # King, Queen & Jack = 10
 
-deal = Deal()
-deal.dealHand()
+    def get_value(self):
+        self.calculate_value()
+        return self.value
+
+    def display(self):
+        for card in self.cards:
+            print(card)
+        print("Value:", self.get_value())
+
+class Game:
+    def __init__(self):
+        pass
+
+    def play(self):
+        playing = True
+        while playing:
+            self.deck = Deck()                                    # Creates the deck
+            self.deck.shuffle()                                   # Shuffles the cards
+
+            self.player_hand = Hand()                             # Deals the players hand of 7 cards
+            for i in range (7):
+                self.player_hand.add_card(self.deck.deal())
+
+            print("Your hand is: ")
+            self.player_hand.display()
+            print("\nDo you want another hand?")
+            again = input("Y\\N:")
+            while True:
+                if again == "Y":
+                    self.play()
+                elif again == "N":
+                    sys.exit()
+                else:
+                    again =input("Please enter 'Y' or 'N', silly rabbit")
+
+
+game = Game()
+game.play()
 
 
