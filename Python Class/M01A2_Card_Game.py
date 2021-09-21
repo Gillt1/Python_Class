@@ -3,7 +3,7 @@
 #  Author: Tom Gill
 #  Course: CWCT Python Essentials
 #  Date: 9/9/2021
-#  Assignment: MOD A
+#  Assignment: INTMOD1A2
 #  Purpose: This is the beginning of creating a more sophisticated card game. Create a module for a card game.
 #
 # The module should :
@@ -113,7 +113,7 @@ class Game:
                 elif again == "N":
                     sys.exit()
                 else:
-                    again =input("Please enter 'Y' or 'N', silly rabbit")
+                    again = input("Please enter 'Y' or 'N', silly rabbit")
 
 
 game = Game()
